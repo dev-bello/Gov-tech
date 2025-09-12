@@ -2,7 +2,12 @@ import type { Config } from "tailwindcss";
 
 export default {
   darkMode: ["class"],
-  content: ["./pages/**/*.{ts,tsx}", "./components/**/*.{ts,tsx}", "./app/**/*.{ts,tsx}", "./src/**/*.{ts,tsx}"],
+  content: [
+    "./pages/**/*.{ts,tsx}",
+    "./components/**/*.{ts,tsx}",
+    "./app/**/*.{ts,tsx}",
+    "./src/**/*.{ts,tsx}",
+  ],
   prefix: "",
   theme: {
     container: {
@@ -27,10 +32,10 @@ export default {
           DEFAULT: "hsl(var(--secondary))",
           foreground: "hsl(var(--secondary-foreground))",
         },
-        'nigeria-green': "hsl(var(--nigeria-green))",
-        'nigeria-gold': "hsl(var(--nigeria-gold))",
-        'tech-blue': "hsl(var(--tech-blue))",
-        'tech-blue-dark': "hsl(var(--tech-blue-dark))",
+        "nigeria-green": "hsl(var(--nigeria-green))",
+        "nigeria-gold": "hsl(var(--nigeria-gold))",
+        "tech-blue": "hsl(var(--tech-blue))",
+        "tech-blue-dark": "hsl(var(--tech-blue-dark))",
         destructive: {
           DEFAULT: "hsl(var(--destructive))",
           foreground: "hsl(var(--destructive-foreground))",
@@ -84,10 +89,15 @@ export default {
             height: "0",
           },
         },
+        scroll: {
+          "0%": { transform: "translateX(0)" },
+          "100%": { transform: "translateX(-100%)" },
+        },
       },
       animation: {
         "accordion-down": "accordion-down 0.2s ease-out",
         "accordion-up": "accordion-up 0.2s ease-out",
+        scroll: "scroll 20s linear infinite",
       },
     },
   },

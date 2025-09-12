@@ -5,7 +5,7 @@ const HeroSection = () => {
     <section className="relative min-h-screen flex items-center justify-center overflow-hidden">
       {/* Background */}
       <div className="absolute inset-0">
-        <div className="absolute inset-0 bg-gradient-to-r from-tech-blue/70 to-tech-blue/90 z-10"></div>
+        <div className="absolute inset-0 bg-blue-700/75 z-10"></div>
         <img
           src="ddd.jpg"
           alt="Nigerian professionals in Gov-Tech training session with laptops and collaborative learning"
@@ -29,7 +29,7 @@ const HeroSection = () => {
           <div className="flex flex-col sm:flex-row gap-4 justify-center">
             <Button
               size="lg"
-              className="bg-nigeria-gold hover:bg-nigeria-gold/90 text-white text-lg px-8 py-6 rounded-lg font-semibold"
+              className="bg-gold hover:bg-gold/90 text-white text-lg px-8 py-6 rounded-lg font-semibold"
             >
               Apply for 2025 Cohort
             </Button>

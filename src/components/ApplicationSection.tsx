@@ -1,211 +1,150 @@
-import { Button } from "@/components/ui/button";
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
-import { Badge } from "@/components/ui/badge";
-import { Calendar, Users, Clock, MapPin, CheckCircle, AlertCircle } from "lucide-react";
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { CircleCheckBig, Circle } from "lucide-react";
 
 const ApplicationSection = () => {
   return (
-    <section id="apply" className="py-20 bg-background">
+    <section id="apply" className="py-20 bg-white">
       <div className="container mx-auto px-4">
         {/* Program Overview */}
         <div className="text-center mb-16">
-          <Badge className="mb-4 bg-nigeria-gold text-white px-4 py-2 text-sm font-semibold">
-            CALL FOR APPLICATIONS
-          </Badge>
-          <h2 className="text-4xl md:text-5xl font-bold mb-6">
-            LLD Gov-Tech Fellowship Program 2025
+          <h2 className="text-4xl md:text-5xl font-bold mb-6 text-gray-800">
+            Program Details
           </h2>
-          <p className="text-xl text-muted-foreground max-w-3xl mx-auto mb-8">
-            Locally Led Development (LLD) invites applications from Nigerian civil servants for our 
-            inaugural Gov-Tech Fellowship Program – a transformative 4-month intensive program.
+          <p className="text-xl text-gray-600 max-w-3xl mx-auto mb-8">
+            The LLD Gov-Tech Fellowship Program is a 4-month intensive program
+            that runs twice a year. We partner with government agencies to
+            identify and solve critical challenges in public service delivery.
           </p>
         </div>
-
-        {/* Program Details */}
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-16">
-          <Card className="text-center">
+        <div className="grid md:grid-cols-2 gap-8 mb-16">
+          {/* Eligibility Criteria */}
+          <Card className="shadow-lg border-none">
             <CardHeader>
-              <Clock className="w-8 h-8 mx-auto text-nigeria-green mb-2" />
-              <CardTitle>Duration</CardTitle>
+              <CardTitle className="text-3xl font-bold text-center text-gray-800">
+                Eligibility Criteria
+              </CardTitle>
             </CardHeader>
             <CardContent>
-              <p className="text-2xl font-bold text-tech-blue">4 Months</p>
-              <p className="text-muted-foreground">Intensive Training</p>
+              <ul className="flex flex-col text-lg text-gray-600 space-y-4">
+                <li className="flex items-center">
+                  <CircleCheckBig className="w-5 h-5 mr-3 text-green-600" />
+                  Must be a Nigerian civil servant at the federal, state, or
+                  local government level.
+                </li>
+                <li className="flex items-center">
+                  <CircleCheckBig className="w-5 h-5 mr-3 text-green-600" />
+                  Minimum of 5 years of experience in the public service.
+                </li>
+                <li className="flex items-center">
+                  <CircleCheckBig className="w-5 h-5 mr-3 text-green-600" />
+                  Demonstrated interest in technology and digital
+                  transformation.
+                </li>
+                <li className="flex items-center">
+                  <CircleCheckBig className="w-5 h-5 mr-3 text-green-600  " />
+                  Strong analytical and problem-solving skills.
+                </li>
+                <li className="flex items-center">
+                  <CircleCheckBig className="w-5 h-5 mr-3 text-green-600" />
+                  Excellent communication and interpersonal skills.
+                </li>
+              </ul>
             </CardContent>
           </Card>
 
-          <Card className="text-center">
+          {/* What You'll Gain */}
+          <Card className="shadow-lg border-none">
             <CardHeader>
-              <Calendar className="w-8 h-8 mx-auto text-nigeria-green mb-2" />
-              <CardTitle>Frequency</CardTitle>
+              <CardTitle className="text-3xl font-bold text-center text-gray-800">
+                What You'll Gain
+              </CardTitle>
             </CardHeader>
             <CardContent>
-              <p className="text-2xl font-bold text-tech-blue">Twice</p>
-              <p className="text-muted-foreground">Annually</p>
-            </CardContent>
-          </Card>
-
-          <Card className="text-center">
-            <CardHeader>
-              <Users className="w-8 h-8 mx-auto text-nigeria-green mb-2" />
-              <CardTitle>Cohort Size</CardTitle>
-            </CardHeader>
-            <CardContent>
-              <p className="text-2xl font-bold text-tech-blue">25</p>
-              <p className="text-muted-foreground">Fellows per cohort</p>
-            </CardContent>
-          </Card>
-
-          <Card className="text-center">
-            <CardHeader>
-              <MapPin className="w-8 h-8 mx-auto text-nigeria-green mb-2" />
-              <CardTitle>Format</CardTitle>
-            </CardHeader>
-            <CardContent>
-              <p className="text-2xl font-bold text-tech-blue">90% Remote</p>
-              <p className="text-muted-foreground">10% In-person</p>
+              <ul className="list-disc list-inside list-red flex flex-col text-md text-gray-600 space-y-1">
+                <li>
+                  Expert-Led Learning: Training from Nigerian and international
+                  GovTech leaders, policy experts, and LLD's experienced team.
+                </li>
+                <li>
+                  Professional Network: Access to a community of
+                  forward-thinking government professionals and tech innovators.
+                </li>
+                <li>
+                  Practical Application: Support for real-world capstone project
+                  addressing Nigeria's digital governance challenge.
+                </li>
+                <li>
+                  Career Advancement: Skills and certification to contribute to
+                  digital transformation in your agency.
+                </li>
+                <li>
+                  Mentorship: One-on-one guidance from experienced GovTech
+                  practitioners.
+                </li>
+                <li>
+                  Certificate of Completion: Recognized credential from LLD and
+                  partners.
+                </li>
+              </ul>
             </CardContent>
           </Card>
         </div>
+        <div className="grid md:grid-cols-2 gap-8 mb-16">
+          {/* Learning Modalities: */}
+          <Card className="shadow-lg border-none">
+            <CardHeader>
+              <CardTitle className="text-3xl font-bold text-center text-gray-800">
+                Learning Modalities
+              </CardTitle>
+            </CardHeader>
 
-        {/* Program Dates */}
-        <Card className="mb-16 bg-gradient-to-r from-tech-blue/10 to-nigeria-green/10">
-          <CardHeader>
-            <CardTitle className="text-2xl text-center">Program Dates</CardTitle>
-          </CardHeader>
-          <CardContent>
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-8 text-center">
-              <div className="p-6 bg-white rounded-lg shadow-sm">
-                <h3 className="text-xl font-bold text-tech-blue mb-2">Cohort 1</h3>
-                <p className="text-lg font-semibold">January 2026 – April 2026</p>
-              </div>
-              <div className="p-6 bg-white rounded-lg shadow-sm">
-                <h3 className="text-xl font-bold text-tech-blue mb-2">Cohort 2</h3>
-                <p className="text-lg font-semibold">July 2026 – October 2026</p>
-              </div>
-            </div>
-          </CardContent>
-        </Card>
+            <CardContent>
+              <ul className="list-disc list-inside text-lg text-gray-600 space-y-2">
+                <li>Blended Learning: 90% remote, 10% in-person</li>
+                <li>Weekly Commitment: 4hours per week </li>
+                <li>
+                  Capstone Project: Final 2 weeks dedicated to project
+                  development and presentation
+                </li>
+                <li>
+                  Technology Access: Laptops and internet connectivity support
+                  as needed
+                </li>
+              </ul>
+            </CardContent>
+          </Card>
 
-        {/* Eligibility Criteria */}
-        <Card className="mb-16">
-          <CardHeader>
-            <CardTitle className="text-2xl flex items-center">
-              <CheckCircle className="w-6 h-6 mr-2 text-nigeria-green" />
-              Eligibility Criteria
-            </CardTitle>
-            <CardDescription>Mandatory Requirements</CardDescription>
-          </CardHeader>
-          <CardContent>
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-              <div className="space-y-4">
-                <div className="flex items-start">
-                  <CheckCircle className="w-5 h-5 text-nigeria-green mr-3 mt-0.5 flex-shrink-0" />
-                  <div>
-                    <h4 className="font-semibold">Nigerian Citizenship</h4>
-                    <p className="text-muted-foreground text-sm">Current employment in Nigerian government (Local, State, or Federal)</p>
-                  </div>
-                </div>
-                <div className="flex items-start">
-                  <CheckCircle className="w-5 h-5 text-nigeria-green mr-3 mt-0.5 flex-shrink-0" />
-                  <div>
-                    <h4 className="font-semibold">Minimum 3 Years Experience</h4>
-                    <p className="text-muted-foreground text-sm">Government service experience required</p>
-                  </div>
-                </div>
-                <div className="flex items-start">
-                  <CheckCircle className="w-5 h-5 text-nigeria-green mr-3 mt-0.5 flex-shrink-0" />
-                  <div>
-                    <h4 className="font-semibold">Educational Qualification</h4>
-                    <p className="text-muted-foreground text-sm">Bachelor's degree or equivalent professional certification</p>
-                  </div>
-                </div>
-              </div>
-              <div className="space-y-4">
-                <div className="flex items-start">
-                  <CheckCircle className="w-5 h-5 text-nigeria-green mr-3 mt-0.5 flex-shrink-0" />
-                  <div>
-                    <h4 className="font-semibold">Technology Interest</h4>
-                    <p className="text-muted-foreground text-sm">Demonstrated interest in technology applications in government</p>
-                  </div>
-                </div>
-                <div className="flex items-start">
-                  <CheckCircle className="w-5 h-5 text-nigeria-green mr-3 mt-0.5 flex-shrink-0" />
-                  <div>
-                    <h4 className="font-semibold">Full Commitment</h4>
-                    <p className="text-muted-foreground text-sm">Available for 4-month program with employer support</p>
-                  </div>
-                </div>
-                <div className="flex items-start">
-                  <CheckCircle className="w-5 h-5 text-nigeria-green mr-3 mt-0.5 flex-shrink-0" />
-                  <div>
-                    <h4 className="font-semibold">English Proficiency</h4>
-                    <p className="text-muted-foreground text-sm">Ability to participate effectively in English-medium instruction</p>
-                  </div>
-                </div>
-              </div>
-            </div>
-          </CardContent>
-        </Card>
-
-        {/* Application Deadline */}
-        <Card className="mb-16 bg-gradient-to-r from-red-50 to-orange-50 border-l-4 border-l-red-500">
-          <CardHeader>
-            <CardTitle className="text-2xl flex items-center text-red-700">
-              <AlertCircle className="w-6 h-6 mr-2" />
-              Application Deadline
-            </CardTitle>
-          </CardHeader>
-          <CardContent>
-            <p className="text-xl font-bold text-red-700 mb-2">October 24th, 2025 at 11:59 PM WAT</p>
-            <p className="text-muted-foreground">
-              Late applications will not be accepted. We encourage early submission to ensure all technical requirements are met.
-            </p>
-          </CardContent>
-        </Card>
-
-        {/* How to Apply */}
-        <Card className="mb-16">
-          <CardHeader>
-            <CardTitle className="text-2xl">How to Apply</CardTitle>
-          </CardHeader>
-          <CardContent>
-            <div className="grid grid-cols-1 md:grid-cols-4 gap-6">
-              <div className="text-center">
-                <div className="w-12 h-12 rounded-full bg-nigeria-green text-white flex items-center justify-center mx-auto mb-4 text-xl font-bold">1</div>
-                <h4 className="font-semibold mb-2">Review Criteria</h4>
-                <p className="text-muted-foreground text-sm">Review eligibility criteria and select your preferred track</p>
-              </div>
-              <div className="text-center">
-                <div className="w-12 h-12 rounded-full bg-nigeria-green text-white flex items-center justify-center mx-auto mb-4 text-xl font-bold">2</div>
-                <h4 className="font-semibold mb-2">Complete Application</h4>
-                <p className="text-muted-foreground text-sm">Complete the online application at www.lld.africa/govtech-fellowship</p>
-              </div>
-              <div className="text-center">
-                <div className="w-12 h-12 rounded-full bg-nigeria-green text-white flex items-center justify-center mx-auto mb-4 text-xl font-bold">3</div>
-                <h4 className="font-semibold mb-2">Upload Documents</h4>
-                <p className="text-muted-foreground text-sm">Upload all required documents</p>
-              </div>
-              <div className="text-center">
-                <div className="w-12 h-12 rounded-full bg-nigeria-green text-white flex items-center justify-center mx-auto mb-4 text-xl font-bold">4</div>
-                <h4 className="font-semibold mb-2">Submit</h4>
-                <p className="text-muted-foreground text-sm">Submit before the deadline</p>
-              </div>
-            </div>
-          </CardContent>
-        </Card>
-
-        {/* CTA */}
-        <div className="text-center">
-          <Button 
-            size="lg" 
-            className="bg-gradient-to-r from-nigeria-green to-tech-blue hover:from-nigeria-green/90 hover:to-tech-blue/90 text-white text-xl px-12 py-6 rounded-lg font-semibold"
-          >
-            Apply Now - www.lld.africa/govtech-fellowship-apply
-          </Button>
-          <p className="text-muted-foreground mt-4 text-lg">
-            Transform your career. Transform government. Transform Nigeria.
-          </p>
+          {/* Post-Fellowship Opportunities */}
+          <Card className="shadow-lg border-none">
+            <CardHeader>
+              <CardTitle className="text-3xl font-bold text-center text-gray-800">
+                Post-Fellowship Opportunities
+              </CardTitle>
+            </CardHeader>
+            <CardContent>
+              <ul className="list-disc list-inside text-lg text-gray-600 space-y-4">
+                <li>
+                  LLD Alumni Network: Ongoing peer collaboration and learning
+                </li>
+                <li>
+                  Advanced Certifications: Pathways to specialized international
+                  certifications
+                </li>
+                <li>
+                  Consulting Opportunities: Potential involvement in LLD's
+                  government consulting projects
+                </li>
+                <li>
+                  Leadership Roles: Priority consideration for senior GovTech
+                  positions
+                </li>
+                <li>
+                  International Exchanges: Opportunities for study tours and
+                  international fellowships
+                </li>
+              </ul>
+            </CardContent>
+          </Card>
         </div>
       </div>
     </section>
