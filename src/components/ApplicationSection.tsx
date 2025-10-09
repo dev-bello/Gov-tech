@@ -1,7 +1,12 @@
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import { CircleCheckBig, Circle } from "lucide-react";
+import { CircleCheckBig } from "lucide-react";
+import { Button } from "./ui/button";
 
-const ApplicationSection = () => {
+interface ApplicationSectionProps {
+  openModal: () => void;
+}
+
+const ApplicationSection = ({ openModal }: ApplicationSectionProps) => {
   return (
     <section id="apply" className="py-20 bg-white">
       <div className="container mx-auto px-4">
@@ -60,7 +65,7 @@ const ApplicationSection = () => {
               </CardTitle>
             </CardHeader>
             <CardContent>
-              <ul className="list-disc list-inside list-red flex flex-col text-md text-gray-600 space-y-1">
+              <ul className="text-justify list-inside list-red flex flex-col text-md text-gray-600 space-y-1">
                 <li>
                   Expert-Led Learning: Training from Nigerian and international
                   GovTech leaders, policy experts, and LLD's experienced team.
@@ -145,6 +150,15 @@ const ApplicationSection = () => {
               </ul>
             </CardContent>
           </Card>
+        </div>
+        <div className="text-center">
+          <Button
+            size="lg"
+            className="bg-blue-600 hover:bg-blue-700 text-white text-xl px-12 py-6 rounded-lg font-semibold"
+            onClick={openModal}
+          >
+            Apply for 2025 Cohort
+          </Button>
         </div>
       </div>
     </section>

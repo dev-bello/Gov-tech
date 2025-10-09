@@ -1,6 +1,10 @@
 import { Button } from "@/components/ui/button";
 
-const HeroSection = () => {
+interface HeroSectionProps {
+  openModal: () => void;
+}
+
+const HeroSection = ({ openModal }: HeroSectionProps) => {
   return (
     <section className="relative min-h-screen flex items-center justify-center overflow-hidden">
       {/* Background */}
@@ -30,6 +34,7 @@ const HeroSection = () => {
             <Button
               size="lg"
               className="bg-gold hover:bg-gold/90 text-white text-lg px-8 py-6 rounded-lg font-semibold"
+              onClick={openModal}
             >
               Apply for 2025 Cohort
             </Button>

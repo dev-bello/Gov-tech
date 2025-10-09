@@ -1,4 +1,9 @@
 import { Button } from "@/components/ui/button";
+
+interface HowToApplySectionProps {
+  openModal: () => void;
+}
+
 const timelineData = [
   {
     title: "Step 1",
@@ -22,7 +27,7 @@ const timelineData = [
   },
 ];
 
-const HowToApplySection = () => {
+const HowToApplySection = ({ openModal }: HowToApplySectionProps) => {
   return (
     <section id="how-to-apply" className="py-20 bg-gray-50">
       <div className="container mx-auto px-4">
@@ -95,6 +100,7 @@ const HowToApplySection = () => {
           <Button
             size="lg"
             className="bg-blue-600 hover:bg-blue-700 text-white text-xl px-12 py-6 rounded-lg font-semibold"
+            onClick={openModal}
           >
             Apply for 2025 Cohort
           </Button>

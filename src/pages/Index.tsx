@@ -3,12 +3,15 @@ import HeroSection from "@/components/HeroSection";
 import ProgramSection from "@/components/ProgramSection";
 import ApplicationSection from "@/components/ApplicationSection";
 import ContactSection from "@/components/ContactSection";
-
 import PedagogySection from "@/components/PedagogySection";
 import SponsorsSection from "@/components/SponsorsSection";
 import HowToApplySection from "@/components/HowToApplySection";
 
-const Index = () => {
+interface IndexProps {
+  openModal: () => void;
+}
+
+const Index = ({ openModal }: IndexProps) => {
   return (
     <>
       <Helmet>
@@ -77,9 +80,9 @@ const Index = () => {
 
       <div className="min-h-screen bg-gray-50">
         <main>
-          <HeroSection />
-          <ApplicationSection />
-          <HowToApplySection />
+          <HeroSection openModal={openModal} />
+          <ApplicationSection openModal={openModal} />
+          <HowToApplySection openModal={openModal} />
 
           <ProgramSection />
           <PedagogySection />
