@@ -13,6 +13,7 @@ import { Label } from "./ui/label";
 import { RadioGroup, RadioGroupItem } from "./ui/radio-group";
 import { Checkbox } from "./ui/checkbox";
 import Cookies from "js-cookie";
+import { useToast } from "@/hooks/use-toast";
 import { Textarea } from "./ui/textarea";
 import {
   Select,
@@ -60,6 +61,7 @@ const STEPS = [
 export function RegistrationModal({ isOpen, onClose }: RegistrationModalProps) {
   const [currentStep, setCurrentStep] = useState(0);
   const [isUploading, setIsUploading] = useState(false);
+  const { toast } = useToast();
   const [formData, setFormData] = useState(() => {
     const savedData = Cookies.get("registrationFormData");
     return savedData ? JSON.parse(savedData) : {};
@@ -159,10 +161,19 @@ export function RegistrationModal({ isOpen, onClose }: RegistrationModalProps) {
       .insert([submissionData]);
 
     if (error) {
+      toast({
+        title: "Submission Failed",
+        description: error.message,
+        variant: "destructive",
+      });
       console.error("Error submitting application:", error);
     } else {
-      console.log("Application submitted successfully!");
+      toast({
+        title: "Success!",
+        description: "Your application has been submitted successfully.",
+      });
       Cookies.remove("registrationFormData");
+      setFormData({});
       onClose();
     }
   };
