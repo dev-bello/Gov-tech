@@ -16,9 +16,11 @@ const ApplicationSection = ({ openModal }: ApplicationSectionProps) => {
             Program Details
           </h2>
           <p className="text-xl text-gray-600 max-w-3xl mx-auto mb-8">
-            The LLD Gov-Tech Fellowship Program is a 4-month intensive program
-            that runs twice a year. We partner with government agencies to
-            identify and solve critical challenges in public service delivery.
+            Locally Led Development (LLD) invites applications from civil
+            servants for our inaugural Gov-Tech Fellowship Program – a
+            transformative 4-month intensive program designed to equip
+            government officials with cutting-edge technology skills to drive
+            innovation, transparency, and efficiency in public service delivery.
           </p>
         </div>
         <div className="grid md:grid-cols-2 gap-8 mb-16">
@@ -30,28 +32,18 @@ const ApplicationSection = ({ openModal }: ApplicationSectionProps) => {
               </CardTitle>
             </CardHeader>
             <CardContent>
-              <ul className="flex flex-col text-lg text-gray-600 space-y-4">
-                <li className="flex items-center">
-                  <CircleCheckBig className="w-5 h-5 mr-3 text-green-600" />
-                  Must be a Nigerian civil servant at the federal, state, or
-                  local government level.
+              <ul className="list-disc list-inside list-red flex flex-col text-lg text-gray-600 space-y-4">
+                <li>
+                  Current employment in Local, State or Federal government.
                 </li>
-                <li className="flex items-center">
-                  <CircleCheckBig className="w-5 h-5 mr-3 text-green-600" />
-                  Minimum of 5 years of experience in the public service.
+                <li>Minimum 3 years of experience in Government</li>
+                <li>
+                  Demonstrate interest in application of technology in
+                  Government through work experience, training or projects.
                 </li>
-                <li className="flex items-center">
-                  <CircleCheckBig className="w-5 h-5 mr-3 text-green-600" />
-                  Demonstrated interest in technology and digital
-                  transformation.
-                </li>
-                <li className="flex items-center">
-                  <CircleCheckBig className="w-5 h-5 mr-3 text-green-600  " />
-                  Strong analytical and problem-solving skills.
-                </li>
-                <li className="flex items-center">
-                  <CircleCheckBig className="w-5 h-5 mr-3 text-green-600" />
-                  Excellent communication and interpersonal skills.
+                <li>
+                  English Proficiency: Ability to participate effectively in
+                  English-medium instruction
                 </li>
               </ul>
             </CardContent>
@@ -65,7 +57,7 @@ const ApplicationSection = ({ openModal }: ApplicationSectionProps) => {
               </CardTitle>
             </CardHeader>
             <CardContent>
-              <ul className="text-justify list-inside list-red flex flex-col text-md text-gray-600 space-y-1">
+              <ul className="text-justify list-disc list-inside  list-red flex flex-col text-md text-gray-600 space-y-1">
                 <li>
                   Expert-Led Learning: Training from Nigerian and international
                   GovTech leaders, policy experts, and LLD's experienced team.
@@ -127,7 +119,7 @@ const ApplicationSection = ({ openModal }: ApplicationSectionProps) => {
               </CardTitle>
             </CardHeader>
             <CardContent>
-              <ul className="list-disc list-inside text-lg text-gray-600 space-y-4">
+              <ul className="list-disc list-inside text-lg text-gray-600 space-y-0">
                 <li>
                   LLD Alumni Network: Ongoing peer collaboration and learning
                 </li>

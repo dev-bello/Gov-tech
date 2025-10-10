@@ -22,7 +22,7 @@ const timelineData = [
   },
   {
     title: "Step 4",
-    description: "Submit before 11:59 PM WAT on October 28, 2025",
+    description: "Submit before 11:59 PM WAT on November 28, 2025",
     align: "right",
   },
 ];

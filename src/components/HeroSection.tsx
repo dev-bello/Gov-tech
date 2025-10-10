@@ -20,7 +20,7 @@ const HeroSection = ({ openModal }: HeroSectionProps) => {
       {/* Content */}
       <div className="relative z-20 container mx-auto px-4 text-center">
         <div className="max-w-4xl mx-auto">
-          <h1 className="text-5xl md:text-7xl font-bold text-white mb-6 leading-tight">
+          <h1 className="text-5xl md:text-7xl font-bold text-white mb-8 mt-10 leading-tight">
             LLD Gov-Tech
             <br />
             <span className="text-nigeria-gold">Fellowship Program</span>
@@ -33,7 +33,7 @@ const HeroSection = ({ openModal }: HeroSectionProps) => {
           <div className="flex flex-col sm:flex-row gap-4 justify-center">
             <Button
               size="lg"
-              className="bg-gold hover:bg-gold/90 text-white text-lg px-8 py-6 rounded-lg font-semibold"
+              className="bg-yellow-50 bg-opacity-[0.8] hover:bg-gold/90 text-gray-600 text-lg px-8 py-6 rounded-lg font-semibold"
               onClick={openModal}
             >
               Apply for 2025 Cohort

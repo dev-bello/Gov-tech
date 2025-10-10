@@ -87,7 +87,7 @@ const Index = ({ openModal }: IndexProps) => {
           <ProgramSection />
           <PedagogySection />
 
-          <SponsorsSection />
+          {/* <SponsorsSection /> */}
 
           <ContactSection />
         </main>

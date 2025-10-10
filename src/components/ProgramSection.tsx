@@ -19,9 +19,9 @@ const modules = [
       {
         title: "Course 1: Policy & Regulatory Frameworks",
         topics: [
-          "Overview of Nigeria's National ICT Policy and e-Government initiatives",
-          "National Broadband Plan: Strategic importance for digital transformation",
-          "Broadband Infrastructure Policy: Regulatory framework for telecommunications",
+          "Introduction to Gov-tech, e-governance, smart government.",
+          "National Broadband Plan: Strategic importance for digital transformation and government service delivery",
+          "Broadband Infrastructure Policy: Regulatory framework for telecommunications in government operations",
           "Connectivity Standards: Quality of service requirements for government applications",
         ],
       },

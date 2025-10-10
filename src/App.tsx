@@ -6,6 +6,7 @@ import { BrowserRouter, Routes, Route } from "react-router-dom";
 import { useState } from "react";
 import Index from "./pages/Index";
 import NotFound from "./pages/NotFound";
+import Dashboard from "./pages/Dashboard";
 import Header from "./components/Header";
 import Footer from "./components/Footer";
 import { RegistrationModal } from "./components/RegistrationModal";
@@ -27,6 +28,7 @@ const App = () => {
           <Header openModal={openModal} />
           <Routes>
             <Route path="/" element={<Index openModal={openModal} />} />
+            <Route path="/dashboard" element={<Dashboard />} />
             <Route path="*" element={<NotFound />} />
           </Routes>
           <Footer />

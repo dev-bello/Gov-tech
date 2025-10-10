@@ -1,4 +1,5 @@
 import { useState, useEffect } from "react";
+import { createClient } from "@supabase/supabase-js";
 import { Button } from "./ui/button";
 import {
   Dialog,
@@ -21,6 +22,25 @@ import {
   SelectValue,
 } from "./ui/select";
 
+const supabase = createClient(
+  import.meta.env.VITE_SUPABASE_URL!,
+  import.meta.env.VITE_SUPABASE_ANON_KEY!
+);
+
+async function handleFileUpload(file: File, folder: string) {
+  // Add timestamp to avoid duplicate filename collisions
+  const fileName = `${Date.now()}_${file.name}`;
+  const { data, error } = await supabase.storage
+    .from("registration_docs")
+    .upload(`${folder}/${fileName}`, file, {
+      cacheControl: "3600",
+      upsert: false,
+    });
+
+  if (error) throw error;
+  return data.path;
+}
+
 interface RegistrationModalProps {
   isOpen: boolean;
   onClose: () => void;
@@ -31,25 +51,121 @@ const STEPS = [
   "Professional Information",
   "Educational Background",
   "Technology Experience & Interest",
-  "Program Preferences & Motivation",
+  "Motivation",
   "Diversity & Inclusion (Optional)",
-  "References",
   "Required Documents",
   "Declaration & Consent",
 ];
 
 export function RegistrationModal({ isOpen, onClose }: RegistrationModalProps) {
   const [currentStep, setCurrentStep] = useState(0);
+  const [isUploading, setIsUploading] = useState(false);
   const [formData, setFormData] = useState(() => {
     const savedData = Cookies.get("registrationFormData");
     return savedData ? JSON.parse(savedData) : {};
   });
+
+  const isDeclarationComplete =
+    formData.accuracy &&
+    formData.authorization &&
+    formData.commitment &&
+    formData.dataConsent &&
+    formData.communication;
 
   useEffect(() => {
     Cookies.set("registrationFormData", JSON.stringify(formData), {
       expires: 7,
     });
   }, [formData]);
+
+  const handleFileChange = async (e: React.ChangeEvent<HTMLInputElement>) => {
+    const { name, files } = e.target;
+    if (!files || files.length === 0) return;
+
+    setIsUploading(true);
+    try {
+      const userIdentifier = (formData.email || "unknown_user").replace(
+        /[^a-zA-Z0-9]/g,
+        "_"
+      );
+
+      // Handle multiple uploads (like additional documents)
+      if (name === "additionalDocuments") {
+        const urls = await Promise.all(
+          Array.from(files).map(async (file) => {
+            const path = await handleFileUpload(file, userIdentifier);
+            const { data } = supabase.storage
+              .from("registration_docs")
+              .getPublicUrl(path);
+            return data.publicUrl;
+          })
+        );
+        setFormData((prev: any) => ({ ...prev, [name]: urls }));
+      } else {
+        // Single file upload (e.g., ID document)
+        const file = files[0];
+        const path = await handleFileUpload(file, userIdentifier);
+        const { data } = supabase.storage
+          .from("registration_docs")
+          .getPublicUrl(path);
+        setFormData((prev: any) => ({ ...prev, [name]: data.publicUrl }));
+      }
+    } catch (error) {
+      console.error("Error uploading file:", error);
+      alert("Upload failed. Please try again.");
+    } finally {
+      setIsUploading(false);
+    }
+  };
+
+  const handleSubmit = async () => {
+    // Map frontend state to Supabase schema
+    const submissionData = {
+      first_name: formData.firstName,
+      last_name: formData.lastName,
+      email: formData.email,
+      phone: formData.phone,
+      gender: formData.gender,
+      address: formData.address,
+      state: formData.state,
+      lga: formData.lga,
+      current_position: formData.currentPosition,
+      organization: formData.organization,
+      government_level: formData.governmentLevel,
+      years_experience: formData.yearsExperience,
+      grade_level: formData.gradeLevel,
+      work_description: formData.workDescription,
+      supervisor: formData.supervisor,
+      supervisor_contact: formData.supervisorContact,
+      highest_degree: formData.highestDegree,
+      field_of_study: formData.fieldOfStudy,
+      institution: formData.institution,
+      graduation_year: formData.graduationYear,
+      additional_certifications: formData.additionalCertifications,
+      tech_experience: formData.techExperience,
+      tech_skills: formData.techSkills,
+      tech_proficiency: formData.techProficiency,
+      motivation: formData.motivation,
+      challenges: formData.challenges,
+      project_idea: formData.projectIdea,
+      time_commitment: formData.timeCommitment,
+      disability: formData.disability,
+      accommodations: formData.accommodations,
+      identification_document_url: formData.identificationDocument,
+    };
+
+    const { error } = await supabase
+      .from("lld_registrations")
+      .insert([submissionData]);
+
+    if (error) {
+      console.error("Error submitting application:", error);
+    } else {
+      console.log("Application submitted successfully!");
+      Cookies.remove("registrationFormData");
+      onClose();
+    }
+  };
 
   const handleChange = (
     e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
@@ -63,10 +179,21 @@ export function RegistrationModal({ isOpen, onClose }: RegistrationModalProps) {
   };
 
   const handleSelectChange = (name: string, value: string | boolean) => {
-    setFormData((prev: any) => ({
-      ...prev,
-      [name]: value,
-    }));
+    if (name.includes(".")) {
+      const [outer, inner] = name.split(".");
+      setFormData((prev: any) => ({
+        ...prev,
+        [outer]: {
+          ...prev[outer],
+          [inner]: value,
+        },
+      }));
+    } else {
+      setFormData((prev: any) => ({
+        ...prev,
+        [name]: value,
+      }));
+    }
   };
 
   const handleNestedChange = (
@@ -98,7 +225,7 @@ export function RegistrationModal({ isOpen, onClose }: RegistrationModalProps) {
 
   const renderStep = () => {
     switch (currentStep) {
-      case 0: // Personal Information
+      case 0:
         return (
           <div>
             <h3 className="text-lg font-medium mb-4">{STEPS[currentStep]}</h3>
@@ -129,14 +256,7 @@ export function RegistrationModal({ isOpen, onClose }: RegistrationModalProps) {
                 value={formData.phone || ""}
                 onChange={handleChange}
               />
-              <div className="col-span-2">
-                <Input
-                  name="dateOfBirth"
-                  type="date"
-                  value={formData.dateOfBirth || ""}
-                  onChange={handleChange}
-                />
-              </div>
+
               <div className="col-span-2">
                 <Select
                   name="gender"
@@ -149,9 +269,6 @@ export function RegistrationModal({ isOpen, onClose }: RegistrationModalProps) {
                   <SelectContent>
                     <SelectItem value="male">Male</SelectItem>
                     <SelectItem value="female">Female</SelectItem>
-                    <SelectItem value="prefer-not-to-say">
-                      Prefer not to say
-                    </SelectItem>
                   </SelectContent>
                 </Select>
               </div>
@@ -302,12 +419,14 @@ export function RegistrationModal({ isOpen, onClose }: RegistrationModalProps) {
                 placeholder="Field of Study"
                 value={formData.fieldOfStudy || ""}
                 onChange={handleChange}
+                required
               />
               <Input
                 name="institution"
                 placeholder="Institution"
                 value={formData.institution || ""}
                 onChange={handleChange}
+                required
               />
               <Input
                 className="col-span-2"
@@ -316,6 +435,7 @@ export function RegistrationModal({ isOpen, onClose }: RegistrationModalProps) {
                 type="number"
                 value={formData.graduationYear || ""}
                 onChange={handleChange}
+                required
               />
               <Textarea
                 className="col-span-2"
@@ -323,6 +443,7 @@ export function RegistrationModal({ isOpen, onClose }: RegistrationModalProps) {
                 placeholder="Additional Professional Certifications or Training"
                 value={formData.additionalCertifications || ""}
                 onChange={handleChange}
+                required
               />
             </div>
           </div>
@@ -418,34 +539,11 @@ export function RegistrationModal({ isOpen, onClose }: RegistrationModalProps) {
             </div>
           </div>
         );
-      case 4: // Program Preferences & Motivation
+      case 4: // Motivation
         return (
           <div>
             <h3 className="text-lg font-medium mb-4">{STEPS[currentStep]}</h3>
             <div className="grid grid-cols-2 gap-4">
-              <div className="col-span-2">
-                <RadioGroup
-                  name="preferredCohort"
-                  onValueChange={(value) =>
-                    handleSelectChange("preferredCohort", value)
-                  }
-                  value={formData.preferredCohort}
-                >
-                  <Label>Preferred Cohort</Label>
-                  <div className="flex items-center space-x-2">
-                    <RadioGroupItem value="cohort1" id="cohort1" />
-                    <Label htmlFor="cohort1">Cohort 1 (Jan-Apr 2026)</Label>
-                  </div>
-                  <div className="flex items-center space-x-2">
-                    <RadioGroupItem value="cohort2" id="cohort2" />
-                    <Label htmlFor="cohort2">Cohort 2 (Jul-Oct 2026)</Label>
-                  </div>
-                  <div className="flex items-center space-x-2">
-                    <RadioGroupItem value="either" id="cohortEither" />
-                    <Label htmlFor="cohortEither">Either cohort</Label>
-                  </div>
-                </RadioGroup>
-              </div>
               <Textarea
                 className="col-span-2"
                 name="motivation"
@@ -532,129 +630,12 @@ export function RegistrationModal({ isOpen, onClose }: RegistrationModalProps) {
             </div>
           </div>
         );
-      case 6: // References
-        return (
-          <div>
-            <h3 className="text-lg font-medium mb-4">{STEPS[currentStep]}</h3>
-            <div className="col-span-2 space-y-4">
-              <h4 className="font-semibold">Professional Reference 1</h4>
-              <div className="grid grid-cols-2 gap-4">
-                <Input
-                  name="ref1.name"
-                  placeholder="Full Name"
-                  value={formData.ref1?.name || ""}
-                  onChange={handleNestedChange}
-                />
-                <Input
-                  name="ref1.position"
-                  placeholder="Position/Title"
-                  value={formData.ref1?.position || ""}
-                  onChange={handleNestedChange}
-                />
-                <Input
-                  name="ref1.organization"
-                  placeholder="Organization"
-                  value={formData.ref1?.organization || ""}
-                  onChange={handleNestedChange}
-                />
-                <Input
-                  name="ref1.relationship"
-                  placeholder="Relationship to You"
-                  value={formData.ref1?.relationship || ""}
-                  onChange={handleNestedChange}
-                />
-                <Input
-                  name="ref1.email"
-                  placeholder="Email Address"
-                  type="email"
-                  value={formData.ref1?.email || ""}
-                  onChange={handleNestedChange}
-                />
-                <Input
-                  name="ref1.phone"
-                  placeholder="Phone Number"
-                  type="tel"
-                  value={formData.ref1?.phone || ""}
-                  onChange={handleNestedChange}
-                />
-              </div>
-            </div>
-            <div className="col-span-2 space-y-4 mt-4">
-              <h4 className="font-semibold">
-                Professional Reference 2 (Optional)
-              </h4>
-              <div className="grid grid-cols-2 gap-4">
-                <Input
-                  name="ref2.name"
-                  placeholder="Full Name"
-                  value={formData.ref2?.name || ""}
-                  onChange={handleNestedChange}
-                />
-                <Input
-                  name="ref2.position"
-                  placeholder="Position/Title"
-                  value={formData.ref2?.position || ""}
-                  onChange={handleNestedChange}
-                />
-                <Input
-                  name="ref2.organization"
-                  placeholder="Organization"
-                  value={formData.ref2?.organization || ""}
-                  onChange={handleNestedChange}
-                />
-                <Input
-                  name="ref2.relationship"
-                  placeholder="Relationship to You"
-                  value={formData.ref2?.relationship || ""}
-                  onChange={handleNestedChange}
-                />
-                <Input
-                  name="ref2.email"
-                  placeholder="Email Address"
-                  type="email"
-                  value={formData.ref2?.email || ""}
-                  onChange={handleNestedChange}
-                />
-                <Input
-                  name="ref2.phone"
-                  placeholder="Phone Number"
-                  type="tel"
-                  value={formData.ref2?.phone || ""}
-                  onChange={handleNestedChange}
-                />
-              </div>
-            </div>
-          </div>
-        );
-      case 7: // Required Documents
+
+      case 6: // Required Documents
         return (
           <div>
             <h3 className="text-lg font-medium mb-4">{STEPS[currentStep]}</h3>
             <div className="grid grid-cols-1 gap-4">
-              <div>
-                <Label htmlFor="resume">Resume/CV</Label>
-                <Input id="resume" name="resume" type="file" />
-              </div>
-              <div>
-                <Label htmlFor="endorsementLetter">
-                  Official Endorsement Letter
-                </Label>
-                <Input
-                  id="endorsementLetter"
-                  name="endorsementLetter"
-                  type="file"
-                />
-              </div>
-              <div>
-                <Label htmlFor="educationCertificate">
-                  Educational Certificate
-                </Label>
-                <Input
-                  id="educationCertificate"
-                  name="educationCertificate"
-                  type="file"
-                />
-              </div>
               <div>
                 <Label htmlFor="identificationDocument">
                   Valid Identification Document
@@ -663,26 +644,19 @@ export function RegistrationModal({ isOpen, onClose }: RegistrationModalProps) {
                   id="identificationDocument"
                   name="identificationDocument"
                   type="file"
-                />
-              </div>
-              <div>
-                <Label htmlFor="additionalDocuments">
-                  Additional Supporting Documents
-                </Label>
-                <Input
-                  id="additionalDocuments"
-                  name="additionalDocuments"
-                  type="file"
-                  multiple
+                  onChange={handleFileChange}
                 />
               </div>
             </div>
           </div>
         );
-      case 8: // Declaration & Consent
+      case 7: // Declaration & Consent
         return (
           <div>
             <h3 className="text-lg font-medium mb-4">{STEPS[currentStep]}</h3>
+            <p className="text-sm text-muted-foreground mb-2">
+              Please select all options to proceed
+            </p>
             <div className="space-y-4">
               <div className="flex items-start space-x-2">
                 <Checkbox
@@ -692,6 +666,7 @@ export function RegistrationModal({ isOpen, onClose }: RegistrationModalProps) {
                   onCheckedChange={(checked) =>
                     handleSelectChange("accuracy", !!checked)
                   }
+                  required
                 />
                 <Label htmlFor="accuracy">
                   I certify that all information is true and accurate.
@@ -705,6 +680,7 @@ export function RegistrationModal({ isOpen, onClose }: RegistrationModalProps) {
                   onCheckedChange={(checked) =>
                     handleSelectChange("authorization", !!checked)
                   }
+                  required
                 />
                 <Label htmlFor="authorization">
                   I authorize verification of the information provided.
@@ -718,6 +694,7 @@ export function RegistrationModal({ isOpen, onClose }: RegistrationModalProps) {
                   onCheckedChange={(checked) =>
                     handleSelectChange("commitment", !!checked)
                   }
+                  required
                 />
                 <Label htmlFor="commitment">
                   I commit to full participation if selected.
@@ -731,6 +708,7 @@ export function RegistrationModal({ isOpen, onClose }: RegistrationModalProps) {
                   onCheckedChange={(checked) =>
                     handleSelectChange("dataConsent", !!checked)
                   }
+                  required
                 />
                 <Label htmlFor="dataConsent">
                   I consent to the use of my personal data for this program.
@@ -744,6 +722,7 @@ export function RegistrationModal({ isOpen, onClose }: RegistrationModalProps) {
                   onCheckedChange={(checked) =>
                     handleSelectChange("communication", !!checked)
                   }
+                  required
                 />
                 <Label htmlFor="communication">
                   I agree to receive program updates.
@@ -776,7 +755,13 @@ export function RegistrationModal({ isOpen, onClose }: RegistrationModalProps) {
           {currentStep < STEPS.length - 1 ? (
             <Button onClick={nextStep}>Next</Button>
           ) : (
-            <Button type="submit">Submit Application</Button>
+            <Button
+              type="submit"
+              onClick={handleSubmit}
+              disabled={isUploading || !isDeclarationComplete}
+            >
+              {isUploading ? "Uploading..." : "Submit"}
+            </Button>
           )}
         </div>
       </DialogContent>
