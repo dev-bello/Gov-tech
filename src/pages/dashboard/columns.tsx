@@ -165,10 +165,16 @@ export const columns: ColumnDef<Registration>[] = [
   },
   {
     accessorKey: "created_at",
-    header: "Created At",
-  },
-  {
-    accessorKey: "updated_at",
-    header: "Updated At",
+    header: "Date Registred",
+    cell: ({ row }) => {
+      const date = new Date(row.getValue("created_at"));
+      const formattedDate = date.toLocaleDateString("en-US", {
+        weekday: "long",
+        year: "numeric",
+        month: "long",
+        day: "numeric",
+      });
+      return <div>{formattedDate}</div>;
+    },
   },
 ];
