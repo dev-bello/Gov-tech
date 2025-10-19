@@ -1,7 +1,5 @@
-import { useEffect, useState } from "react";
-import { supabase } from "@/lib/supabase";
-import { columns } from "./dashboard/columns";
-import { DataTable } from "./dashboard/data-table";
+import { Outlet } from "react-router-dom";
+import { DashboardLayout } from "./dashboard/DashboardLayout";
 
 export type Registration = {
   id: string;
@@ -41,31 +39,9 @@ export type Registration = {
 };
 
 export default function Dashboard() {
-  const [data, setData] = useState<Registration[]>([]);
-  const [loading, setLoading] = useState(true);
-
-  useEffect(() => {
-    const fetchData = async () => {
-      const { data, error } = await supabase.from("lld_registrations").select();
-      if (error) {
-        console.error("Error fetching data:", error);
-      } else {
-        setData(data as Registration[]);
-      }
-      setLoading(false);
-    };
-
-    fetchData();
-  }, []);
-
-  if (loading) {
-    return <div>Loading...</div>;
-  }
-
   return (
-    <div className="container mx-auto py-10 mb-2">
-      <h1 className="text-2xl font-bold mb-12">LLD Registrations</h1>
-      <DataTable columns={columns} data={data} />
-    </div>
+    <DashboardLayout>
+      <Outlet />
+    </DashboardLayout>
   );
 }

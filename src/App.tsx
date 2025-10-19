@@ -7,6 +7,9 @@ import { useState } from "react";
 import Index from "./pages/Index";
 import NotFound from "./pages/NotFound";
 import Dashboard from "./pages/Dashboard";
+import RegistrationsDashboard from "./pages/dashboard/RegistrationsDashboard";
+import ContactInfoDashboard from "./pages/dashboard/ContactInfoDashboard";
+import FaqsDashboard from "./pages/dashboard/FaqsDashboard";
 import Header from "./components/Header";
 import Footer from "./components/Footer";
 import { RegistrationModal } from "./components/RegistrationModal";
@@ -26,11 +29,21 @@ const App = () => {
         <Sonner />
         <BrowserRouter>
           <Header openModal={openModal} />
-          <Routes>
-            <Route path="/" element={<Index openModal={openModal} />} />
-            <Route path="/dashboard" element={<Dashboard />} />
-            <Route path="*" element={<NotFound />} />
-          </Routes>
+          <main className="pt-16">
+            <Routes>
+              <Route path="/" element={<Index openModal={openModal} />} />
+              <Route path="/dashboard" element={<Dashboard />}>
+                <Route index element={<RegistrationsDashboard />} />
+                <Route
+                  path="registrations"
+                  element={<RegistrationsDashboard />}
+                />
+                <Route path="contact" element={<ContactInfoDashboard />} />
+                <Route path="faqs" element={<FaqsDashboard />} />
+              </Route>
+              <Route path="*" element={<NotFound />} />
+            </Routes>
+          </main>
           <Footer />
         </BrowserRouter>
         <RegistrationModal isOpen={isModalOpen} onClose={closeModal} />

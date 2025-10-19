@@ -146,7 +146,7 @@ const ApplicationSection = ({ openModal }: ApplicationSectionProps) => {
         <div className="text-center">
           <Button
             size="lg"
-            className="bg-blue-600 hover:bg-blue-700 text-white text-xl px-12 py-6 rounded-lg font-semibold"
+            className="bg-[#032a58] hover:bg-blue-700 text-white text-xl px-12 py-6 rounded-lg font-semibold"
             onClick={openModal}
           >
             Apply for 2025 Cohort

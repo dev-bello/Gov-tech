@@ -66,7 +66,7 @@ const HowToApplySection = ({ openModal }: HowToApplySectionProps) => {
                 </div>
 
                 {/* Dot */}
-                <div className="absolute left-1/2 w-4 h-4 bg-blue-600 rounded-full transform -translate-x-1/2"></div>
+                <div className="absolute left-1/2 w-4 h-4 bg-[#032a58] rounded-full transform -translate-x-1/2"></div>
               </div>
             ))}
           </div>
@@ -99,7 +99,7 @@ const HowToApplySection = ({ openModal }: HowToApplySectionProps) => {
         <div className="text-center">
           <Button
             size="lg"
-            className="bg-blue-600 hover:bg-blue-700 text-white text-xl px-12 py-6 rounded-lg font-semibold"
+            className="bg-[#032a58] hover:bg-blue-700 text-white text-xl px-12 py-6 rounded-lg font-semibold"
             onClick={openModal}
           >
             Apply for 2025 Cohort

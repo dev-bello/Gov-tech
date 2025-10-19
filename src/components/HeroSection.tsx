@@ -6,10 +6,13 @@ interface HeroSectionProps {
 
 const HeroSection = ({ openModal }: HeroSectionProps) => {
   return (
-    <section className="relative min-h-screen flex items-center justify-center overflow-hidden">
+    <section
+      id="home"
+      className="relative min-h-screen flex items-center justify-center overflow-hidden"
+    >
       {/* Background */}
       <div className="absolute inset-0">
-        <div className="absolute inset-0 bg-blue-700/75 z-10"></div>
+        <div className="absolute inset-0 bg-[#032a58]/75 z-10"></div>
         <img
           src="ddd.jpg"
           alt="Nigerian professionals in Gov-Tech training session with laptops and collaborative learning"

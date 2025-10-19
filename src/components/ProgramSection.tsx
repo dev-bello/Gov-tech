@@ -184,13 +184,13 @@ const ProgramSection = () => {
                   <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
                     {module.courses.map((course, index) => (
                       <div key={index}>
-                        <h4 className="text-lg sm:text-xl font-semibold mb-3 text-blue-600">
+                        <h4 className="text-lg sm:text-xl font-semibold mb-3 text-[#032a58]">
                           {course.title}
                         </h4>
                         <ul className="space-y-2">
                           {course.topics.map((topic, topicIndex) => (
                             <li key={topicIndex} className="flex items-start">
-                              <div className="w-2 h-2 rounded-full bg-blue-600 mt-2 mr-3 flex-shrink-0"></div>
+                              <div className="w-2 h-2 rounded-full bg-[#032a58] mt-2 mr-3 flex-shrink-0"></div>
                               <span className="text-gray-600">{topic}</span>
                             </li>
                           ))}

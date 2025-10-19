@@ -1,5 +1,5 @@
 import { useState, useEffect } from "react";
-import { createClient } from "@supabase/supabase-js";
+import { supabase } from "@/lib/supabase";
 import { Button } from "./ui/button";
 import {
   Dialog,
@@ -22,11 +22,6 @@ import {
   SelectTrigger,
   SelectValue,
 } from "./ui/select";
-
-const supabase = createClient(
-  import.meta.env.VITE_SUPABASE_URL!,
-  import.meta.env.VITE_SUPABASE_ANON_KEY!
-);
 
 async function handleFileUpload(file: File, folder: string) {
   // Add timestamp to avoid duplicate filename collisions
