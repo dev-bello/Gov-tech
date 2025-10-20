@@ -12,6 +12,7 @@ const sections = [
   { name: "FAQs", icon: Settings, path: "/dashboard/faqs" },
   { name: "Pedagogy", icon: Settings, path: "/dashboard/pedagogy" },
   { name: "Curriculum", icon: Settings, path: "/dashboard/curriculum" },
+  { name: "Program", icon: Settings, path: "/dashboard/program" },
 ];
 
 export function DashboardNav() {

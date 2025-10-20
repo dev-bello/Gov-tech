@@ -12,6 +12,7 @@ import ContactInfoDashboard from "./pages/dashboard/ContactInfoDashboard";
 import FaqsDashboard from "./pages/dashboard/FaqsDashboard";
 import PedagogyDashboard from "./pages/dashboard/PedagogyDashboard";
 import CurriculumDashboard from "./pages/dashboard/CurriculumDashboard";
+import ProgramDashboard from "./pages/dashboard/ProgramDashboard";
 import Header from "./components/Header";
 import Footer from "./components/Footer";
 import { RegistrationModal } from "./components/RegistrationModal";
@@ -44,6 +45,7 @@ const App = () => {
                 <Route path="faqs" element={<FaqsDashboard />} />
                 <Route path="pedagogy" element={<PedagogyDashboard />} />
                 <Route path="curriculum" element={<CurriculumDashboard />} />
+                <Route path="program" element={<ProgramDashboard />} />
               </Route>
               <Route path="*" element={<NotFound />} />
             </Routes>

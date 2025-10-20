@@ -1,17 +1,57 @@
+import { useState, useEffect } from "react";
 import { Helmet } from "react-helmet";
 import HeroSection from "@/components/HeroSection";
-import ProgramSection from "@/components/ProgramSection";
-import ApplicationSection from "@/components/ApplicationSection";
+import ProgramSection, { Module } from "@/components/ProgramSection";
+import ApplicationSection, { Program } from "@/components/ApplicationSection";
 import ContactSection from "@/components/ContactSection";
 import PedagogySection from "@/components/PedagogySection";
-import SponsorsSection from "@/components/SponsorsSection";
 import HowToApplySection from "@/components/HowToApplySection";
+import { LoadingSpinner } from "@/components/ui/loading";
+import { supabase } from "@/lib/supabase";
 
 interface IndexProps {
   openModal: () => void;
 }
 
 const Index = ({ openModal }: IndexProps) => {
+  const [loading, setLoading] = useState(true);
+  const [program, setProgram] = useState<Program | null>(null);
+  const [modules, setModules] = useState<Module[]>([]);
+
+  useEffect(() => {
+    const fetchAllData = async () => {
+      const { data: programData, error: programError } = await supabase
+        .from("program_details")
+        .select("*, sections:program_sections(*, points:program_points(*))")
+        .single();
+
+      if (programError) {
+        console.error("Error fetching program details:", programError);
+      } else {
+        setProgram(programData as Program);
+      }
+
+      const { data: modulesData, error: modulesError } = await supabase
+        .from("curriculum_modules")
+        .select("*, courses:curriculum_courses(*, topics:curriculum_topics(*))")
+        .order("order_index");
+
+      if (modulesError) {
+        console.error("Error fetching modules:", modulesError);
+      } else {
+        setModules(modulesData as Module[]);
+      }
+
+      setLoading(false);
+    };
+
+    fetchAllData();
+  }, []);
+
+  if (loading) {
+    return <LoadingSpinner />;
+  }
+
   return (
     <>
       <Helmet>
@@ -81,14 +121,10 @@ const Index = ({ openModal }: IndexProps) => {
       <div className="min-h-screen bg-gray-50">
         <main>
           <HeroSection openModal={openModal} />
-          <ApplicationSection openModal={openModal} />
+          <ApplicationSection openModal={openModal} program={program} />
           <HowToApplySection openModal={openModal} />
-
-          <ProgramSection />
+          <ProgramSection modules={modules} />
           <PedagogySection />
-
-          {/* <SponsorsSection /> */}
-
           <ContactSection />
         </main>
       </div>

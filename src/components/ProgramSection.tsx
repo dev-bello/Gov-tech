@@ -1,5 +1,4 @@
-import { useEffect, useState } from "react";
-import { supabase } from "@/lib/supabase";
+import { useState } from "react";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { ChevronDown } from "lucide-react";
 
@@ -18,7 +17,7 @@ type Course = {
   topics: Topic[];
 };
 
-type Module = {
+export type Module = {
   id: string;
   title: string;
   description: string;
@@ -26,69 +25,16 @@ type Module = {
   courses: Course[];
 };
 
-const ProgramSection = () => {
-  const [modules, setModules] = useState<Module[]>([]);
-  const [loading, setLoading] = useState(true);
+interface ProgramSectionProps {
+  modules: Module[];
+}
+
+const ProgramSection = ({ modules }: ProgramSectionProps) => {
   const [openModule, setOpenModule] = useState<string | null>(null);
-
-  useEffect(() => {
-    const fetchCurriculum = async () => {
-      const { data: modulesData, error: modulesError } = await supabase
-        .from("curriculum_modules")
-        .select()
-        .order("order_index");
-
-      if (modulesError) {
-        console.error("Error fetching modules:", modulesError);
-        setLoading(false);
-        return;
-      }
-
-      const { data: coursesData, error: coursesError } = await supabase
-        .from("curriculum_courses")
-        .select()
-        .order("order_index");
-
-      if (coursesError) {
-        console.error("Error fetching courses:", coursesError);
-        setLoading(false);
-        return;
-      }
-
-      const { data: topicsData, error: topicsError } = await supabase
-        .from("curriculum_topics")
-        .select();
-
-      if (topicsError) {
-        console.error("Error fetching topics:", topicsError);
-        setLoading(false);
-        return;
-      }
-
-      const curriculum = modulesData.map((module) => ({
-        ...module,
-        courses: coursesData
-          .filter((course) => course.module_id === module.id)
-          .map((course) => ({
-            ...course,
-            topics: topicsData.filter((topic) => topic.course_id === course.id),
-          })),
-      }));
-
-      setModules(curriculum as Module[]);
-      setLoading(false);
-    };
-
-    fetchCurriculum();
-  }, []);
 
   const toggleModule = (id: string) => {
     setOpenModule(openModule === id ? null : id);
   };
-
-  if (loading) {
-    return <div>Loading...</div>;
-  }
 
   return (
     <section id="curriculum" className="py-20 bg-gray-50">

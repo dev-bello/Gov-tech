@@ -1,147 +1,69 @@
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import { CircleCheckBig } from "lucide-react";
 import { Button } from "./ui/button";
+
+type Point = {
+  id: string;
+  section_id: string;
+  content: string;
+  point_order: number;
+};
+
+type Section = {
+  id: string;
+  program_id: string;
+  section_title: string;
+  section_order: number;
+  points: Point[];
+};
+
+export type Program = {
+  id: string;
+  title: string;
+  description: string;
+  sections: Section[];
+};
 
 interface ApplicationSectionProps {
   openModal: () => void;
+  program: Program | null;
 }
 
-const ApplicationSection = ({ openModal }: ApplicationSectionProps) => {
+const ApplicationSection = ({
+  openModal,
+  program,
+}: ApplicationSectionProps) => {
+  if (!program) {
+    return <div>No program details available.</div>;
+  }
+
   return (
     <section id="apply" className="py-20 bg-white">
       <div className="container mx-auto px-4">
-        {/* Program Overview */}
         <div className="text-center mb-16">
           <h2 className="text-4xl md:text-5xl font-bold mb-6 text-gray-800">
-            Program Details
+            {program.title}
           </h2>
           <p className="text-xl text-gray-600 max-w-3xl mx-auto mb-8">
-            Locally Led Development (LLD) invites applications from civil
-            servants for our inaugural Gov-Tech Fellowship Program – a
-            transformative 4-month intensive program designed to equip
-            government officials with cutting-edge technology skills to drive
-            innovation, transparency, and efficiency in public service delivery.
+            {program.description}
           </p>
         </div>
         <div className="grid md:grid-cols-2 gap-8 mb-16">
-          {/* Eligibility Criteria */}
-          <Card className="shadow-lg border-none">
-            <CardHeader>
-              <CardTitle className="text-3xl font-bold text-center text-gray-800">
-                Eligibility Criteria
-              </CardTitle>
-            </CardHeader>
-            <CardContent>
-              <ul className="list-disc list-inside list-red flex flex-col text-lg text-gray-600 space-y-4">
-                <li>
-                  Current employment in Local, State or Federal government.
-                </li>
-                <li>Minimum 3 years of experience in Government</li>
-                <li>
-                  Demonstrate interest in application of technology in
-                  Government through work experience, training or projects.
-                </li>
-                <li>
-                  English Proficiency: Ability to participate effectively in
-                  English-medium instruction
-                </li>
-              </ul>
-            </CardContent>
-          </Card>
-
-          {/* What You'll Gain */}
-          <Card className="shadow-lg border-none">
-            <CardHeader>
-              <CardTitle className="text-3xl font-bold text-center text-gray-800">
-                What You'll Gain
-              </CardTitle>
-            </CardHeader>
-            <CardContent>
-              <ul className="text-justify list-disc list-inside  list-red flex flex-col text-md text-gray-600 space-y-1">
-                <li>
-                  Expert-Led Learning: Training from Nigerian and international
-                  GovTech leaders, policy experts, and LLD's experienced team.
-                </li>
-                <li>
-                  Professional Network: Access to a community of
-                  forward-thinking government professionals and tech innovators.
-                </li>
-                <li>
-                  Practical Application: Support for real-world capstone project
-                  addressing Nigeria's digital governance challenge.
-                </li>
-                <li>
-                  Career Advancement: Skills and certification to contribute to
-                  digital transformation in your agency.
-                </li>
-                <li>
-                  Mentorship: One-on-one guidance from experienced GovTech
-                  practitioners.
-                </li>
-                <li>
-                  Certificate of Completion: Recognized credential from LLD and
-                  partners.
-                </li>
-              </ul>
-            </CardContent>
-          </Card>
-        </div>
-        <div className="grid md:grid-cols-2 gap-8 mb-16">
-          {/* Learning Modalities: */}
-          <Card className="shadow-lg border-none">
-            <CardHeader>
-              <CardTitle className="text-3xl font-bold text-center text-gray-800">
-                Learning Modalities
-              </CardTitle>
-            </CardHeader>
-
-            <CardContent>
-              <ul className="list-disc list-inside text-lg text-gray-600 space-y-2">
-                <li>Blended Learning: 90% remote, 10% in-person</li>
-                <li>Weekly Commitment: 4hours per week </li>
-                <li>
-                  Capstone Project: Final 2 weeks dedicated to project
-                  development and presentation
-                </li>
-                <li>
-                  Technology Access: Laptops and internet connectivity support
-                  as needed
-                </li>
-              </ul>
-            </CardContent>
-          </Card>
-
-          {/* Post-Fellowship Opportunities */}
-          <Card className="shadow-lg border-none">
-            <CardHeader>
-              <CardTitle className="text-3xl font-bold text-center text-gray-800">
-                Post-Fellowship Opportunities
-              </CardTitle>
-            </CardHeader>
-            <CardContent>
-              <ul className="list-disc list-inside text-lg text-gray-600 space-y-0">
-                <li>
-                  LLD Alumni Network: Ongoing peer collaboration and learning
-                </li>
-                <li>
-                  Advanced Certifications: Pathways to specialized international
-                  certifications
-                </li>
-                <li>
-                  Consulting Opportunities: Potential involvement in LLD's
-                  government consulting projects
-                </li>
-                <li>
-                  Leadership Roles: Priority consideration for senior GovTech
-                  positions
-                </li>
-                <li>
-                  International Exchanges: Opportunities for study tours and
-                  international fellowships
-                </li>
-              </ul>
-            </CardContent>
-          </Card>
+          {program.sections.map((section) => (
+            <Card key={section.id} className="shadow-lg border-none">
+              <CardHeader>
+                <CardTitle className="text-3xl font-bold text-center text-gray-800">
+                  {section.section_title}
+                </CardTitle>
+              </CardHeader>
+              <CardContent>
+                <ul className="list-disc list-inside list-red flex flex-col text-lg text-gray-600 space-y-4">
+                  {section.points.map((point) => (
+                    <li key={point.id}>{point.content}</li>
+                  ))}
+                </ul>
+              </CardContent>
+            </Card>
+          ))}
         </div>
         <div className="text-center">
           <Button
