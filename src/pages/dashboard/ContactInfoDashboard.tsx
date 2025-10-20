@@ -4,6 +4,7 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { useToast } from "@/hooks/use-toast";
 
 type ContactInfo = {
   id: string;
@@ -17,6 +18,7 @@ type ContactInfo = {
 export default function ContactInfoDashboard() {
   const [contactInfo, setContactInfo] = useState<ContactInfo | null>(null);
   const [loading, setLoading] = useState(true);
+  const { toast } = useToast();
 
   useEffect(() => {
     const fetchData = async () => {
@@ -51,7 +53,10 @@ export default function ContactInfoDashboard() {
     if (error) {
       console.error("Error updating contact info:", error);
     } else {
-      alert("Contact information updated successfully!");
+      toast({
+        title: "Success",
+        description: "Contact information updated successfully!",
+      });
     }
   };
 

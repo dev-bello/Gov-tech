@@ -5,6 +5,7 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { useToast } from "@/hooks/use-toast";
 
 type Faq = {
   id: string;
@@ -18,6 +19,7 @@ export default function FaqsDashboard() {
   const [loading, setLoading] = useState(true);
   const [editingFaq, setEditingFaq] = useState<Faq | null>(null);
   const [newFaq, setNewFaq] = useState({ question: "", answer: "" });
+  const { toast } = useToast();
 
   useEffect(() => {
     fetchFaqs();
@@ -45,7 +47,10 @@ export default function FaqsDashboard() {
     if (error) {
       console.error("Error updating FAQ:", error);
     } else {
-      alert("FAQ updated successfully!");
+      toast({
+        title: "Success",
+        description: "FAQ updated successfully!",
+      });
       setEditingFaq(null);
       fetchFaqs();
     }
@@ -56,7 +61,10 @@ export default function FaqsDashboard() {
     if (error) {
       console.error("Error deleting FAQ:", error);
     } else {
-      alert("FAQ deleted successfully!");
+      toast({
+        title: "Success",
+        description: "FAQ deleted successfully!",
+      });
       fetchFaqs();
     }
   };
@@ -73,7 +81,10 @@ export default function FaqsDashboard() {
     if (error) {
       console.error("Error adding FAQ:", error);
     } else {
-      alert("FAQ added successfully!");
+      toast({
+        title: "Success",
+        description: "FAQ added successfully!",
+      });
       setNewFaq({ question: "", answer: "" });
       fetchFaqs();
     }

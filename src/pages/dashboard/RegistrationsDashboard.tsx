@@ -47,7 +47,7 @@ export default function RegistrationsDashboard() {
     <div className="container mx-auto py-10 mb-2">
       <div className="flex justify-between items-center mb-12">
         <h1 className="text-2xl font-bold">LLD Registrations</h1>
-        <Button onClick={handleExport}>Export to CSV</Button>
+        <Button onClick={handleExport}>Export as CSV</Button>
       </div>
       <DataTable columns={columns} data={data} />
     </div>

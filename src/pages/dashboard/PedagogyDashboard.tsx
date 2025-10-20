@@ -5,6 +5,7 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { useToast } from "@/hooks/use-toast";
 
 type Pedagogy = {
   id: string;
@@ -21,6 +22,7 @@ export default function PedagogyDashboard() {
     title: "",
     description: "",
   });
+  const { toast } = useToast();
 
   useEffect(() => {
     fetchPedagogy();
@@ -51,7 +53,10 @@ export default function PedagogyDashboard() {
     if (error) {
       console.error("Error updating pedagogy:", error);
     } else {
-      alert("Pedagogy updated successfully!");
+      toast({
+        title: "Success",
+        description: "Pedagogy Section updated successfully!",
+      });
       setEditingPedagogy(null);
       fetchPedagogy();
     }
@@ -65,7 +70,10 @@ export default function PedagogyDashboard() {
     if (error) {
       console.error("Error deleting pedagogy:", error);
     } else {
-      alert("Pedagogy deleted successfully!");
+      toast({
+        title: "Success",
+        description: "Pedagogy deleted successfully!",
+      });
       fetchPedagogy();
     }
   };
@@ -82,7 +90,10 @@ export default function PedagogyDashboard() {
     if (error) {
       console.error("Error adding pedagogy:", error);
     } else {
-      alert("Pedagogy added successfully!");
+      toast({
+        title: "Success",
+        description: "Pedagogy added successfully!",
+      });
       setNewPedagogy({ title: "", description: "" });
       fetchPedagogy();
     }

@@ -109,7 +109,11 @@ export function RegistrationModal({ isOpen, onClose }: RegistrationModalProps) {
       }
     } catch (error) {
       console.error("Error uploading file:", error);
-      alert("Upload failed. Please try again.");
+      toast({
+        title: "Upload Failed",
+        description: "Please try again.",
+        variant: "destructive",
+      });
     } finally {
       setIsUploading(false);
     }
