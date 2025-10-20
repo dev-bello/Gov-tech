@@ -1,8 +1,10 @@
 import { useEffect, useState } from "react";
+import { unparse } from "papaparse";
 import { supabase } from "@/lib/supabase";
 import { columns } from "./columns";
 import { DataTable } from "./data-table";
 import { Registration } from "../Dashboard";
+import { Button } from "@/components/ui/button";
 
 export default function RegistrationsDashboard() {
   const [data, setData] = useState<Registration[]>([]);
@@ -22,13 +24,31 @@ export default function RegistrationsDashboard() {
     fetchData();
   }, []);
 
+  const handleExport = () => {
+    const csv = unparse(data, {
+      header: true,
+    });
+    const blob = new Blob([csv], { type: "text/csv;charset=utf-8;" });
+    const link = document.createElement("a");
+    const url = URL.createObjectURL(blob);
+    link.setAttribute("href", url);
+    link.setAttribute("download", "registrations.csv");
+    link.style.visibility = "hidden";
+    document.body.appendChild(link);
+    link.click();
+    document.body.removeChild(link);
+  };
+
   if (loading) {
     return <div>Loading...</div>;
   }
 
   return (
     <div className="container mx-auto py-10 mb-2">
-      <h1 className="text-2xl font-bold mb-12">LLD Registrations</h1>
+      <div className="flex justify-between items-center mb-12">
+        <h1 className="text-2xl font-bold">LLD Registrations</h1>
+        <Button onClick={handleExport}>Export to CSV</Button>
+      </div>
       <DataTable columns={columns} data={data} />
     </div>
   );
