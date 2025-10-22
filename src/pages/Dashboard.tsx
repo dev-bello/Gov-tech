@@ -38,10 +38,14 @@ export type Registration = {
   updated_at: string;
 };
 
-export default function Dashboard() {
+import withAuth from "@/components/withAuth";
+
+function Dashboard() {
   return (
     <DashboardLayout>
       <Outlet />
     </DashboardLayout>
   );
 }
+
+export default withAuth(Dashboard);

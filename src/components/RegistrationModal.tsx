@@ -39,7 +39,10 @@ const STEPS = [
 ];
 
 export function RegistrationModal({ isOpen, onClose }: RegistrationModalProps) {
-  const [currentStep, setCurrentStep] = useState(0);
+  const [currentStep, setCurrentStep] = useState(() => {
+    const savedStep = Cookies.get("registrationFormStep");
+    return savedStep ? parseInt(savedStep, 10) : 0;
+  });
   const { toast } = useToast();
   const [formData, setFormData] = useState(() => {
     const savedData = Cookies.get("registrationFormData");
@@ -58,6 +61,10 @@ export function RegistrationModal({ isOpen, onClose }: RegistrationModalProps) {
       expires: 7,
     });
   }, [formData]);
+
+  useEffect(() => {
+    Cookies.set("registrationFormStep", currentStep.toString(), { expires: 7 });
+  }, [currentStep]);
 
   const handleSubmit = async () => {
     // Map frontend state to Supabase schema
@@ -138,7 +145,9 @@ export function RegistrationModal({ isOpen, onClose }: RegistrationModalProps) {
       }
 
       Cookies.remove("registrationFormData");
+      Cookies.remove("registrationFormStep");
       setFormData({});
+      setCurrentStep(0);
       onClose();
     }
   };
