@@ -23,20 +23,6 @@ import {
   SelectValue,
 } from "./ui/select";
 
-async function handleFileUpload(file: File, folder: string) {
-  // Add timestamp to avoid duplicate filename collisions
-  const fileName = `${Date.now()}_${file.name}`;
-  const { data, error } = await supabase.storage
-    .from("registration_docs")
-    .upload(`${folder}/${fileName}`, file, {
-      cacheControl: "3600",
-      upsert: false,
-    });
-
-  if (error) throw error;
-  return data.path;
-}
-
 interface RegistrationModalProps {
   isOpen: boolean;
   onClose: () => void;
@@ -48,14 +34,12 @@ const STEPS = [
   "Educational Background",
   "Technology Experience & Interest",
   "Motivation",
-  "Diversity & Inclusion (Optional)",
-  "Required Documents",
+  "Diversity & Inclusion ",
   "Declaration & Consent",
 ];
 
 export function RegistrationModal({ isOpen, onClose }: RegistrationModalProps) {
   const [currentStep, setCurrentStep] = useState(0);
-  const [isUploading, setIsUploading] = useState(false);
   const { toast } = useToast();
   const [formData, setFormData] = useState(() => {
     const savedData = Cookies.get("registrationFormData");
@@ -74,50 +58,6 @@ export function RegistrationModal({ isOpen, onClose }: RegistrationModalProps) {
       expires: 7,
     });
   }, [formData]);
-
-  const handleFileChange = async (e: React.ChangeEvent<HTMLInputElement>) => {
-    const { name, files } = e.target;
-    if (!files || files.length === 0) return;
-
-    setIsUploading(true);
-    try {
-      const userIdentifier = (formData.email || "unknown_user").replace(
-        /[^a-zA-Z0-9]/g,
-        "_"
-      );
-
-      // Handle multiple uploads (like additional documents)
-      if (name === "additionalDocuments") {
-        const urls = await Promise.all(
-          Array.from(files).map(async (file) => {
-            const path = await handleFileUpload(file, userIdentifier);
-            const { data } = supabase.storage
-              .from("registration_docs")
-              .getPublicUrl(path);
-            return data.publicUrl;
-          })
-        );
-        setFormData((prev: any) => ({ ...prev, [name]: urls }));
-      } else {
-        // Single file upload (e.g., ID document)
-        const file = files[0];
-        const path = await handleFileUpload(file, userIdentifier);
-        const { data } = supabase.storage
-          .from("registration_docs")
-          .getPublicUrl(path);
-        setFormData((prev: any) => ({ ...prev, [name]: data.publicUrl }));
-      }
-    } catch (error) {
-      console.error("Error uploading file:", error);
-      toast({
-        title: "Upload Failed",
-        description: "Please try again.",
-        variant: "destructive",
-      });
-    } finally {
-      setIsUploading(false);
-    }
-  };
 
   const handleSubmit = async () => {
     // Map frontend state to Supabase schema
@@ -152,7 +92,6 @@ export function RegistrationModal({ isOpen, onClose }: RegistrationModalProps) {
       time_commitment: formData.timeCommitment,
       disability: formData.disability,
       accommodations: formData.accommodations,
-      identification_document_url: formData.identificationDocument,
     };
 
     const { error } = await supabase
@@ -160,17 +99,44 @@ export function RegistrationModal({ isOpen, onClose }: RegistrationModalProps) {
       .insert([submissionData]);
 
     if (error) {
-      toast({
-        title: "Submission Failed",
-        description: error.message,
-        variant: "destructive",
-      });
+      if (error.code === "23505") {
+        toast({
+          title: "Submission Failed",
+          description: "This email has already been registered.",
+          variant: "destructive",
+        });
+      } else {
+        toast({
+          title: "Submission Failed",
+          description: error.message,
+          variant: "destructive",
+        });
+      }
       console.error("Error submitting application:", error);
     } else {
       toast({
         title: "Success!",
         description: "Your application has been submitted successfully.",
       });
+
+      // Invoke the send-email Edge Function
+      const { error: functionError } = await supabase.functions.invoke(
+        "send-email",
+        {
+          body: { email: formData.email },
+        }
+      );
+
+      if (functionError) {
+        console.error("Error sending email:", functionError);
+        // Optionally, show a toast notification for email failure
+        toast({
+          title: "Email Failed",
+          description: "Could not send confirmation email.",
+          variant: "destructive",
+        });
+      }
+
       Cookies.remove("registrationFormData");
       setFormData({});
       onClose();
@@ -641,26 +607,7 @@ export function RegistrationModal({ isOpen, onClose }: RegistrationModalProps) {
           </div>
         );
 
-      case 6: // Required Documents
-        return (
-          <div>
-            <h3 className="text-lg font-medium mb-4">{STEPS[currentStep]}</h3>
-            <div className="grid grid-cols-1 gap-4">
-              <div>
-                <Label htmlFor="identificationDocument">
-                  Valid Identification Document
-                </Label>
-                <Input
-                  id="identificationDocument"
-                  name="identificationDocument"
-                  type="file"
-                  onChange={handleFileChange}
-                />
-              </div>
-            </div>
-          </div>
-        );
-      case 7: // Declaration & Consent
+      case 6: // Declaration & Consent
         return (
           <div>
             <h3 className="text-lg font-medium mb-4">{STEPS[currentStep]}</h3>
@@ -768,9 +715,9 @@ export function RegistrationModal({ isOpen, onClose }: RegistrationModalProps) {
             <Button
               type="submit"
               onClick={handleSubmit}
-              disabled={isUploading || !isDeclarationComplete}
+              disabled={!isDeclarationComplete}
             >
-              {isUploading ? "Uploading..." : "Submit"}
+              Submit
             </Button>
           )}
         </div>
