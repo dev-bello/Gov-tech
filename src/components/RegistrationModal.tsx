@@ -22,6 +22,7 @@ import {
   SelectTrigger,
   SelectValue,
 } from "./ui/select";
+import { nigeriaStates, nigeriaLGAs } from "@/lib/nigeria-data";
 
 interface RegistrationModalProps {
   isOpen: boolean;
@@ -264,18 +265,44 @@ export function RegistrationModal({ isOpen, onClose }: RegistrationModalProps) {
                 value={formData.address || ""}
                 onChange={handleChange}
               />
-              <Input
-                name="state"
-                placeholder="State of Residence"
-                value={formData.state || ""}
-                onChange={handleChange}
-              />
-              <Input
-                name="lga"
-                placeholder="Local Government Area"
-                value={formData.lga || ""}
-                onChange={handleChange}
-              />
+              <div className="col-span-2">
+                <Select
+                  name="state"
+                  onValueChange={(value) => handleSelectChange("state", value)}
+                  value={formData.state}
+                >
+                  <SelectTrigger>
+                    <SelectValue placeholder="Select State of Residence" />
+                  </SelectTrigger>
+                  <SelectContent>
+                    {nigeriaStates.map((state) => (
+                      <SelectItem key={state} value={state}>
+                        {state}
+                      </SelectItem>
+                    ))}
+                  </SelectContent>
+                </Select>
+              </div>
+              <div className="col-span-2">
+                <Select
+                  name="lga"
+                  onValueChange={(value) => handleSelectChange("lga", value)}
+                  value={formData.lga}
+                  disabled={!formData.state}
+                >
+                  <SelectTrigger>
+                    <SelectValue placeholder="Select Local Government Area" />
+                  </SelectTrigger>
+                  <SelectContent>
+                    {formData.state &&
+                      nigeriaLGAs[formData.state]?.map((lga) => (
+                        <SelectItem key={lga} value={lga}>
+                          {lga}
+                        </SelectItem>
+                      ))}
+                  </SelectContent>
+                </Select>
+              </div>
             </div>
           </div>
         );
