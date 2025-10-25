@@ -28,7 +28,7 @@ const Header = ({ openModal }: HeaderProps) => {
     <header className="fixed top-0 left-0 right-0 z-50 bg-[#032a58] backdrop-blur-sm ">
       <div className="container mx-auto px-4 py-4 flex justify-between items-center">
         <div className="flex items-center space-x-2">
-          <img src="/LLD.png" width={75} height={75} alt="LLD Logo" />
+          <img src="/LLD.png" width={85} height={85} alt="LLD Logo" />
         </div>
 
         {/* Desktop Navigation */}
