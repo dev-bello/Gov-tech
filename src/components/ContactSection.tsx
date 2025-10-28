@@ -119,7 +119,7 @@ const ContactSection = () => {
                   <div className="flex items-center">
                     <Linkedin className="w-5 h-5 mr-3 text-[#032a58]" />
                     <a
-                      href={`https://www.linkedin.com/in/ahmed-sani-inuwa`}
+                      href={`https://www.linkedin.com/company/locally-led-development-lld/`}
                       className="text-gray-600 hover:text-blue-600"
                       target="_blank"
                     >
