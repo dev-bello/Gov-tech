@@ -113,6 +113,29 @@ export function RegistrationModal({ isOpen, onClose }: RegistrationModalProps) {
           description: "This email has already been registered.",
           variant: "destructive",
         });
+      } else if (error.message.includes("violates not-null constraint")) {
+        const columnMatch = error.message.match(/column "([^"]+)"/);
+        const column = columnMatch ? columnMatch : null;
+
+        if (column) {
+          // Convert snake_case to Title Case for user-friendly display
+          const friendlyColumnName = column
+            .split("_")
+            .map((word) => word.charAt(0).toUpperCase() + word.slice(1))
+            .join(" ");
+          toast({
+            title: "Submission Failed",
+            description: `The field "${friendlyColumnName}" is required. Please fill it out.`,
+            variant: "destructive",
+          });
+        } else {
+          toast({
+            title: "Submission Failed",
+            description:
+              "Please ensure all required fields are filled before submitting.",
+            variant: "destructive",
+          });
+        }
       } else {
         toast({
           title: "Submission Failed",

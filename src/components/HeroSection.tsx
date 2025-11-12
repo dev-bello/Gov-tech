@@ -31,7 +31,7 @@ const HeroSection = ({ openModal }: HeroSectionProps) => {
           <p className="text-xl md:text-2xl text-white/90 mb-8 max-w-3xl mx-auto leading-relaxed">
             Advancing Government services through technology in Nigeria
             <br />
-            Equip Nigerian civil servants with cutting-edge Gov-tech skills
+            and equipping civil servants with cutting edge gov-tech skills.
           </p>
           <div className="flex flex-col sm:flex-row gap-4 justify-center">
             <Button
