@@ -39,7 +39,6 @@ export type Registration = {
 };
 
 import withAuth from "@/components/withAuth";
-
 function Dashboard() {
   return (
     <DashboardLayout>
