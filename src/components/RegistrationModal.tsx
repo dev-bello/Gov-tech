@@ -23,6 +23,7 @@ import {
   SelectValue,
 } from "./ui/select";
 import { nigeriaStates, nigeriaLGAs } from "@/lib/nigeria-data";
+import { Loader2 } from "lucide-react";
 
 interface RegistrationModalProps {
   isOpen: boolean;
@@ -49,6 +50,7 @@ export function RegistrationModal({ isOpen, onClose }: RegistrationModalProps) {
     const savedData = Cookies.get("registrationFormData");
     return savedData ? JSON.parse(savedData) : {};
   });
+  const [isLoading, setIsLoading] = useState(false);
 
   const isDeclarationComplete =
     formData.accuracy &&
@@ -68,6 +70,7 @@ export function RegistrationModal({ isOpen, onClose }: RegistrationModalProps) {
   }, [currentStep]);
 
   const handleSubmit = async () => {
+    setIsLoading(true);
     // Map frontend state to Supabase schema
     const submissionData = {
       first_name: formData.firstName,
@@ -115,9 +118,8 @@ export function RegistrationModal({ isOpen, onClose }: RegistrationModalProps) {
         });
       } else if (error.message.includes("violates not-null constraint")) {
         const columnMatch = error.message.match(/column "([^"]+)"/);
-        const column = columnMatch ? columnMatch : null;
-
-        if (column) {
+        if (columnMatch) {
+          const column = columnMatch;
           // Convert snake_case to Title Case for user-friendly display
           const friendlyColumnName = column
             .split("_")
@@ -144,6 +146,7 @@ export function RegistrationModal({ isOpen, onClose }: RegistrationModalProps) {
         });
       }
       console.error("Error submitting application:", error);
+      setIsLoading(false);
     } else {
       toast({
         title: "Success!",
@@ -774,9 +777,16 @@ export function RegistrationModal({ isOpen, onClose }: RegistrationModalProps) {
             <Button
               type="submit"
               onClick={handleSubmit}
-              disabled={!isDeclarationComplete}
+              disabled={!isDeclarationComplete || isLoading}
             >
-              Submit
+              {isLoading ? (
+                <>
+                  <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+                  Submitting...
+                </>
+              ) : (
+                "Submit"
+              )}
             </Button>
           )}
         </div>
